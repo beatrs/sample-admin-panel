@@ -5,7 +5,7 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-app.use(express.static('./dist/sample-admin-panel'));
+app.use(express.static('./dist/ap-client'));
 
 app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname+
