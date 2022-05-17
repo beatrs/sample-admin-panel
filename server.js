@@ -5,11 +5,11 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-app.use(express.static('./dist/ap-client'));
+app.use(express.static(__dirname + './dist'));
 
 app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname+
-        '/dist/sample-admin-panel/index.html'));
+    res.sendFile(path.join(__dirname + 
+        '/dist/index.html'));
 });
 
 app.listen(PORT);
