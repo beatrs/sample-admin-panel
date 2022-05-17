@@ -5,11 +5,19 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { sha256 } from 'js-sha256';
 
+import { environment } from 'src/environments/environment';
+
+declare let process:any;
+const env = process.env.NODE_ENV;
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserServiceService {
+
+  public get environmentName() {
+    return environment.environment;
+  }
 
   users : User[] = [];
   user : any;
@@ -17,7 +25,13 @@ export class UserServiceService {
   url = "https://ap-jsonserver.herokuapp.com/users";
   isLoggedIn = false;
 
+
   constructor(private http: HttpClient) { 
+    // console.log(this.environmentName());
+    if (env !== 'production') {
+      this.url = "http://localhost:3000/users"; 
+    }
+
     // this.initUsers();
   }
 

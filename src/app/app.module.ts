@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -17,7 +17,11 @@ import { ModalConfirmComponent } from './shared/modal-confirm/modal-confirm.comp
 import { UserEditPassComponent } from './user-edit-pass/user-edit-pass.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSlider, MatSliderModule} from '@angular/material/slider';
+import { AppInitService } from './app-init.service';
 
+export function init_app(appLoadService: AppInitService) {
+  return () => appLoadService.init();
+}
 
 @NgModule({
   declarations: [
@@ -42,7 +46,15 @@ import {MatSlider, MatSliderModule} from '@angular/material/slider';
     NoopAnimationsModule,
     MatSliderModule
   ],
-  providers: [],
+  providers: [
+    AppInitService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: init_app,
+      deps: [AppInitService],
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent],
   entryComponents: [
   ]
