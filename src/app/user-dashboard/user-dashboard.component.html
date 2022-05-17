@@ -1,0 +1,49 @@
+<!-- <p>user-dashboard works!</p> -->
+
+
+<div class="container">
+  <button class="btn btn-primary btn-add" (click)="openAddModal()">Add New User</button>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Email</th>
+          <!-- <th scope="col">Password</th> -->
+          <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of users; index as i">
+          <th scope="row">{{ i+1 }}</th>
+          <td>
+            {{ user.email }}
+          </td>
+          <!-- <td>{{ user.password }}</td> -->
+          <td>
+            <div class="dropdown">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+              </svg>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" (click)="openViewModal(user)">View</a>
+                <a class="dropdown-item" (click)="openModal(user)">Edit</a>
+                <a class="dropdown-item" >Change Password</a>
+                <a class="dropdown-item" (click)="openDeleteModal(user)">Delete</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="d-flex justify-content-between p-2">
+        <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshUsers()">
+        </ngb-pagination>
+      
+        <select class="form-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshUsers()">
+          <option [ngValue]="2">2 items per page</option>
+          <option [ngValue]="4">4 items per page</option>
+          <option [ngValue]="6">6 items per page</option>
+        </select>
+      </div>
+      
+</div>

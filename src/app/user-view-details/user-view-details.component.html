@@ -1,0 +1,29 @@
+
+<div class="modal-container">
+    <div class="modal-header">
+        <h4 class="modal-title">User Details</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-row">
+            <div class="col">
+                <h5>First Name</h5>
+                <p>{{ activeUser.first_name }}</p>
+            </div>
+            <div class="col">
+                <h5>Last Name</h5>
+                <p>{{ activeUser.last_name }}</p>
+            </div>
+        </div>
+        <div class="mb-3">
+            <h5>Email address</h5>
+            <p>{{ activeUser.email }}</p>
+        </div>
+        <div class="mb-3">
+            <h5>Password</h5>
+            <p class="text">{{ activeUser.password }}</p>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closeModal()">Close</button>
+    </div>
+</div>

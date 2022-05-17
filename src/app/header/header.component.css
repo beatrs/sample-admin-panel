@@ -1,0 +1,18 @@
+
+
+.header {
+    padding: 20px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    background-color: black;
+    color: white;
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav--logout {
+    padding: 10px;
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+}

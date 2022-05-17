@@ -1,0 +1,19 @@
+
+
+.container {
+    width: 60vw;
+    margin: auto;
+}
+
+.dropdown, .dropdown-item {
+    cursor: pointer;
+}
+
+.btn-add {
+    float: right;
+    margin-bottom: 30px;
+}
+
+.form-select {
+    cursor: pointer;
+}

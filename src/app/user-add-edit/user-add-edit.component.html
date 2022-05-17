@@ -1,0 +1,30 @@
+
+<div class="modal-header">
+  <h4 class="modal-title">{{ title }}</h4>
+</div>
+<div class="modal-body">
+  <form #modalForm="ngForm">
+    <div class="form-row">
+      <div class="col">
+        <label for="exampleInputFName" class="form-label">First Name</label>
+        <input type="text" class="form-control" id="exampleInputFName" name="first_name" [(ngModel)]="activeUser.first_name" data-lpignore="true">
+      </div>
+      <div class="col">
+        <label for="exampleInputLName" class="form-label">Last Name</label>
+        <input type="text" class="form-control" id="exampleInputLName" name="last_name" [(ngModel)]="activeUser.last_name" data-lpignore="true">
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Email address</label>
+      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" [(ngModel)]="activeUser.email" data-lpignore="true">
+    </div>
+    <div class="mb-3" *ngIf="type==='post'">
+      <label for="exampleInputPassword1" class="form-label">Password</label>
+      <input type="password" class="form-control" id="exampleInputPassword1" name="password" ngModel data-lpignore="true">
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-dark" (click)="closeModal()">Close</button>
+  <button type="button" class="btn btn-primary" (click)="saveUser(modalForm.value)">Save</button> 
+</div>

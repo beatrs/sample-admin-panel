@@ -1,0 +1,13 @@
+.form-row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.col {
+    padding: 10px;
+}
+
+.mb-3 {
+    padding: 10px;
+}
