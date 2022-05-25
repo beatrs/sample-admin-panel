@@ -48,34 +48,24 @@ export class UserAddEditComponent implements OnInit {
       alert('User succesfully added!');
         
     } else if (this.type == 'put') {
-      this.userService.updateUser(this.user.id, userData)
+      this.userService.updateUser(userData)
         .subscribe((res) => console.log(res));
 
         alert('User succesfully updated!');
     }
     this.closeModal();
-    window.location.reload();
+    this.getUsers();
 
   }
 
-  usersList : User[] = [];
+  usersList : any[] = [];
   async getUsers() {
     await this.userService.getUsers()
       .subscribe((res:any) => {this.usersList = res});
   }
 
   //TODO: change id generation 
-  saveNewUser(userData:User) {
-    let uId = this.usersList.length + 1;
-    let newUser = new User({
-      id: uId,
-      first_name: userData.first_name,
-      last_name: userData.last_name,
-      email: userData.email,
-      password: userData.password,
-      isDeleted: false
-    });
-
+  saveNewUser(newUser:any) {
     this.userService.addUser(newUser)
       .subscribe((res) => console.log(res));
   }

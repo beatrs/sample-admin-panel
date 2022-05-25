@@ -21,16 +21,31 @@ export class UserServiceService {
 
   users : User[] = [];
   user : any;
+  url : any;
+  //* local
   // url = "http://localhost:3000/users"; 
-  url = "https://ap-jsonserver.herokuapp.com/users";
+  //* heroku
+  herokoUrl = "https://ap-jsonserver.herokuapp.com/users";
+  //* glitch
+  glitchUrl = "https://grove-aware-straw.glitch.me/users";
   isLoggedIn = false;
+  activeUser : any;
 
 
   constructor(private http: HttpClient) { 
     // console.log(this.environmentName());
-    if (env !== 'production') {
-      this.url = "http://localhost:3000/users"; 
-    }
+
+    // * deployment
+    // if (env !== 'production') {
+    //   this.url = this.glitchUrl; 
+    // } else {
+    //   this.url = this.herokoUrl;
+    // }
+
+    
+    this.url = this.glitchUrl; 
+    this.getAllUsers();
+    console.log(this.users);
 
     // this.initUsers();
   }
@@ -62,36 +77,36 @@ export class UserServiceService {
   }
   
   addUser(user:any) {
-    user.isDeleted = false;
+    // user.isDeleted = false;
     user.password = this.hashPassword(user.password);
     return this.http.post(this.url, user);
   }
 
-  updateUser(id: number, user:User) {
-    user.isDeleted = false;
+  updateUser(user:any) {
+    // user.isDeleted = false;
     // user.password = this.hashPassword(user.password);
-    this.getUser(id);
+
     user.password = this.user.password;
-    return this.http.put(this.url+`/${id}`, user)
+    return this.http.put(this.url+`/${user.id}`, user)
     .pipe(map((res:any)=> {
       return res;
     }))
   }
 
-  removeUser(user:User) {
+  removeUser(user:any) {
     //* soft delete
-    user.isDeleted = true;
-    return this.http.put(this.url+`/${user.id}`, user)
-    .pipe(map((res:any)=> {
-      return res;
-    }))
+    // user.isDeleted = true;
+    // return this.http.put(this.url+`/${user.id}`, user)
+    // .pipe(map((res:any)=> {
+    //   return res;
+    // }))
     
 
     //! hard delete
-    // return this.http.delete(this.url+`/${id}`)
-    //   .pipe(map((res:any)=> {
-    //     return res;
-    //   }))
+    return this.http.delete(this.url+`/${user.id}`)
+      .pipe(map((res:any)=> {
+        return res;
+      }))
 
   }
 
@@ -109,16 +124,20 @@ export class UserServiceService {
       activeUser.email === user.email && activeUser.password === password
     );
 
+    if (exists) {
+      this.setActiveUser(exists);
+      this.setIsLoggedIn(true);
+    }
     return exists;
 
   }
 
-  setIsLoggedIn(status:boolean, userData?:User) {
+  setIsLoggedIn(status:boolean) {
     this.isLoggedIn = status;
 
     //* local storage
     if (status) {
-      const jsonData = JSON.stringify(userData);
+      const jsonData = JSON.stringify(this.activeUser);
       localStorage.setItem('loggedIn', 'true');
       localStorage.setItem('userData', jsonData);
     } else {
@@ -130,14 +149,43 @@ export class UserServiceService {
   }
 
   getIsLoggedIn() {
+    // get login status from localstorage
     const status = localStorage.getItem('loggedIn');
-
-    this.isLoggedIn = status === 'true' ? true : false; 
+    this.isLoggedIn = status === 'true' ? true : false;
+    
+    // get userdata from localstorage
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    this.setActiveUser(userData);
+    
     return this.isLoggedIn; 
   }
 
-  getUserLoggedIn() {
+  setActiveUser(user:any) {
+    this.activeUser = user;
+  }
+
+  getActiveUser() {
+    return this.activeUser;
+  }
+
+  // getUserLoggedIn() {
+  //   const userData:User = JSON.parse(localStorage.getItem('userData') || '{}');
+  //   return userData.email === "john.doe@test.com";
     
+  // }
+
+  changePassword(user:any, newPass:any) {
+    user.password = this.hashPassword(newPass);
+    return this.http.put(this.url+`/${user.id}`, user)
+    .pipe(map((res:any)=> {
+      return res;
+    }));
+  }
+
+  verifyPassword(confirmPassword:any, currentPassword:any) {
+    const hashConfirm = this.hashPassword(confirmPassword);
+
+    return hashConfirm === currentPassword;
   }
 
 }

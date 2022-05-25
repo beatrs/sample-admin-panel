@@ -1,1 +1,26 @@
-<p>user-edit-pass works!</p>
+
+<div class="modal-header">
+    <h2 class="modal-title">{{ title }}</h2>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="modalForm">
+        <div>
+            <label>Old Password</label>
+            <input formControlName="old_password" placeholder="Old Password" class="form-control" type="password">
+            <div *ngIf="modalForm.get('old_password')?.invalid && (modalForm.get('old_password')?.dirty || modalForm.get('old_password')?.touched) ">
+              Please provide your old password.
+            </div>
+          </div>
+        <div>
+          <label>New Password</label>
+          <input formControlName="new_password" placeholder="New Password" class="form-control" type="password">
+          <div *ngIf="modalForm.get('new_password')?.invalid && (modalForm.get('new_password')?.dirty || modalForm.get('new_password')?.touched) ">
+            Please provide a valid new password.
+          </div>
+        </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="closeModal()">Close</button>
+    <button type="submit" class="btn btn-primary" (click)="onSubmit(modalForm)">Save</button> 
+  </div>

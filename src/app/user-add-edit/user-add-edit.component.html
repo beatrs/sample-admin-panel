@@ -1,6 +1,6 @@
 
 <div class="modal-header">
-  <h4 class="modal-title">{{ title }}</h4>
+  <h2 class="modal-title">{{ title }}</h2>
 </div>
 <div class="modal-body">
   <form #modalForm="ngForm">
@@ -26,5 +26,5 @@
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-outline-dark" (click)="closeModal()">Close</button>
-  <button type="button" class="btn btn-primary" (click)="saveUser(modalForm.value)">Save</button> 
+  <button type="submit" class="btn btn-primary" (click)="saveUser(modalForm.value)">Save</button> 
 </div>

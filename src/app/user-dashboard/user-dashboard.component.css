@@ -10,10 +10,36 @@
 }
 
 .btn-add {
-    float: right;
     margin-bottom: 30px;
 }
 
 .form-select {
     cursor: pointer;
+}
+
+.body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* TODO: fix; dont use float */
+.topbar--user {
+    font-size: 1.25rem;
+    text-decoration: none;
+    color: gray;
+    margin: 10px;
+}
+
+.topbar--logout {
+    cursor: pointer;
+    margin: 10px;
+}
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 60vw;
+    padding: 10px;
+    margin-bottom: 1.5rem;
 }

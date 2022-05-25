@@ -18,23 +18,24 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUsers();
-    
+    const isLoggedIn = this.userService.getIsLoggedIn();
+    console.log(isLoggedIn);
+    if (isLoggedIn) {
+      this.router.navigate(['dashboard']);
+    }
+  }
+
+  usersList : any[] = [];
+  async getUsers() {
+    await this.userService.getUsers()
+      .subscribe((res:any) => {this.usersList = res});
   }
   
-  signUp(user:User) {
+  signUp(newUser:User) {
     // let id = this.userService.getUsers().length;
     // this.userService.addUser(
     //   new User({id: id, email: user.email, password: user.password})
     // );
-    let uId = this.usersList.length + 1;
-    let newUser = new User({
-      id: uId,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      email: user.email,
-      password: user.password,
-      isDeleted: false
-    });
 
     this.userService.addUser(newUser).subscribe((res) => {
       if(res)
@@ -47,10 +48,6 @@ export class RegisterComponent implements OnInit {
     
   }
 
-  usersList : User[] = [];
-  async getUsers() {
-    await this.userService.getUsers()
-      .subscribe((res:any) => {this.usersList = res});
-  }
+  
 
 }

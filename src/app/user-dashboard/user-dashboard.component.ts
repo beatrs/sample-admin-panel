@@ -7,6 +7,7 @@ import { UserAddEditComponent } from '../user-add-edit/user-add-edit.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserViewDetailsComponent } from '../user-view-details/user-view-details.component';
 import { ModalConfirmComponent } from '../shared/modal-confirm/modal-confirm.component';
+import { UserEditPassComponent } from '../user-edit-pass/user-edit-pass.component';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -18,6 +19,8 @@ export class UserDashboardComponent implements OnInit {
 
   count = 1;
   isLoggedIn = this.userService.getIsLoggedIn();
+  USER: any;
+  activeUser: any;
 
   constructor(
     private userService: UserServiceService,
@@ -32,13 +35,19 @@ export class UserDashboardComponent implements OnInit {
       this.router.navigate(['']);
     } else {
       this.fetchUsers();
+      this.fetchActiveUser();
     }
+    console.log(this.isLoggedIn);
+    console.log(this.activeUser)
+    // this.userService.getUserLoggedIn();
   }
 
-  // logout() {
-  //   this.isLoggedIn = false;
-  //   this.userService.setIsLoggedIn(this.isLoggedIn);
-  // }
+  logout() {
+    this.isLoggedIn = false;
+    this.userService.setIsLoggedIn(this.isLoggedIn);
+    // window.location.reload();
+    this.router.navigate(['login']);
+  }
 
   USERS: any;
   page = 1;
@@ -49,11 +58,17 @@ export class UserDashboardComponent implements OnInit {
   fetchUsers(): void {
     this.userService.getUsers().subscribe(
       (res) => {
-        this.USERS = res.filter((user:User) => user.isDeleted !== true);
-        console.log(res);
+        // this.USERS = res.filter((user:User) => user.isDeleted !== true);
+        // console.log(res);
+        this.USERS = res;
         this.collectionSize = this.USERS.length;
         this.users = this.USERS;
       });
+  }
+
+   // get logged in active user
+  fetchActiveUser() {
+    this.activeUser = this.userService.getActiveUser();
   }
 
   refreshUsers() {
@@ -66,30 +81,34 @@ export class UserDashboardComponent implements OnInit {
 
   // * add / edit modal
 
-  openModal(user: User) {
-    const modalRef = this.modalService.open(UserAddEditComponent);
+  openModal(user:any) {
+    const modalRef = this.modalService.open(UserAddEditComponent, {centered: true});
     modalRef.componentInstance.user = user;
     modalRef.componentInstance.type = 'put';
     modalRef.result.then((res) => {
       console.log(res);
+      this.fetchUsers();
+      this.refreshUsers();
     }).catch((err) => {
       console.error(err);
     });
   }
 
   openAddModal() {
-    const modalRef = this.modalService.open(UserAddEditComponent);
+    const modalRef = this.modalService.open(UserAddEditComponent, {centered: true});
     modalRef.componentInstance.type = 'post';
     modalRef.result.then((res) => {
       console.log(res);
+      this.fetchUsers();
+      this.refreshUsers();
     }).catch((err) => {
       console.error(err);
     });
   }
 
-  openViewModal(user: User) {
+  openViewModal(user:any) {
     console.log(this.userService.getUser(user.id));
-    const modalRef = this.modalService.open(UserViewDetailsComponent);
+    const modalRef = this.modalService.open(UserViewDetailsComponent, {centered: true});
     modalRef.componentInstance.user = user;
     modalRef.result.then((res) => {
       console.log(res);
@@ -98,8 +117,8 @@ export class UserDashboardComponent implements OnInit {
     });
   }
 
-  openDeleteModal(user:User) {
-    const modalRef = this.modalService.open(ModalConfirmComponent);
+  openDeleteModal(user:any) {
+    const modalRef = this.modalService.open(ModalConfirmComponent, {centered: true});
     modalRef.componentInstance.user = user;
     modalRef.result.then((res) => {
       if (res) {
@@ -110,8 +129,21 @@ export class UserDashboardComponent implements OnInit {
     })
   }
 
-  deleteUser(user:User) {
+  deleteUser(user:any) {
     this.userService.removeUser(user).subscribe((res) => console.log(res));
     this.users = this.USERS.filter((USER:any) => USER.id !== user.id);
   }
+
+  openEditPassModal(user:any) {
+    const modalRef = this.modalService.open(UserEditPassComponent, {centered: true});
+    modalRef.componentInstance.user = user;
+    modalRef.result.then((res) => {
+      console.log(res);
+      this.fetchUsers();
+      this.refreshUsers();
+    }).catch((err) => {
+      console.error(err);
+    });
+  }
+
 }

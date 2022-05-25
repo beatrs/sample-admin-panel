@@ -10,7 +10,8 @@ import { UserServiceService } from 'src/app/services/user-service.service';
 })
 export class LoginComponent implements OnInit {
 
-  usersList : User[] = [];
+  usersList : any[] = [];
+  isLoggedIn = false;
   constructor(
     private userService:UserServiceService,
     private router: Router) { }
@@ -18,20 +19,24 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     //this.getUsers();
     console.log(this.userService.getAllUsers());
+    this.isLoggedIn = this.userService.getIsLoggedIn();
+    if (this.isLoggedIn) {
+      this.router.navigate(['dashboard']);
+    }
   }
 
-  signIn(user:User) {
+  signIn(user:any) {
     console.log(this.usersList);
     
     const exists = this.userService.verifyUser(user);
     if (exists) {
       console.log('logged in');
-      this.userService.setIsLoggedIn(true, user);
+      // this.userService.setIsLoggedIn(true, user);
       alert('Sign in successful!');
       this.router.navigate(['dashboard'])
-        .then(() => {
-          window.location.reload();
-        });
+        // .then(() => {
+        //   window.location.reload();
+        // });
     }
     else {
       
