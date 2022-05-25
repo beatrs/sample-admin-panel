@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
 import { UserServiceService } from 'src/app/services/user-service.service';
+import { FormGroup, FormBuilder, Validators, NgForm, FormControl, AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -10,9 +11,12 @@ import { UserServiceService } from 'src/app/services/user-service.service';
 })
 export class RegisterComponent implements OnInit {
 
+  registerForm : FormGroup = new FormGroup({});
+
   constructor(
     private userService : UserServiceService,
-    private router: Router,) {
+    private router: Router,
+    private fb: FormBuilder) {
   }
 
 
@@ -23,6 +27,13 @@ export class RegisterComponent implements OnInit {
     if (isLoggedIn) {
       this.router.navigate(['dashboard']);
     }
+
+    this.registerForm = this.fb.group({
+      first_name: [null, [Validators.required]],
+      last_name: [null, [Validators.required]],
+      email: [null, [Validators.required, Validators.email]],
+      password: [null, [Validators.required, Validators.minLength(4)]]
+    })
   }
 
   usersList : any[] = [];

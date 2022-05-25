@@ -3,24 +3,48 @@
   <h2 class="modal-title">{{ title }}</h2>
 </div>
 <div class="modal-body">
-  <form #modalForm="ngForm">
+  <form [formGroup]="modalForm">
     <div class="form-row">
       <div class="col">
-        <label for="exampleInputFName" class="form-label">First Name</label>
-        <input type="text" class="form-control" id="exampleInputFName" name="first_name" [(ngModel)]="activeUser.first_name" data-lpignore="true">
+        <label for="fname" class="form-label">First Name</label>
+        <input type="text" class="form-control" id="fname" name="first_name" ngModel data-lpignore="true" formControlName="first_name">
       </div>
       <div class="col">
-        <label for="exampleInputLName" class="form-label">Last Name</label>
-        <input type="text" class="form-control" id="exampleInputLName" name="last_name" [(ngModel)]="activeUser.last_name" data-lpignore="true">
+        <label for="lname" class="form-label">Last Name</label>
+        <input type="text" class="form-control" id="lname" name="last_name" ngModel data-lpignore="true" formControlName="last_name">
       </div>
     </div>
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">Email address</label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" [(ngModel)]="activeUser.email" data-lpignore="true">
+
+    <!-- * Name Validators * -->
+    <div *ngIf="(modalForm.get('first_name')?.invalid && (modalForm.get('first_name')?.dirty || modalForm.get('first_name')?.touched)) || (modalForm.get('last_name')?.invalid && (modalForm.get('last_name')?.dirty || modalForm.get('last_name')?.touched))" class="mx-2">
+      <div *ngIf="modalForm.get('first_name')?.errors?.['required'] || modalForm.get('last_name')?.errors?.['required']" class="alert alert-warning mt-1" role="alert">
+        Name is required.
+      </div>
     </div>
-    <div class="mb-3" *ngIf="type==='post'">
-      <label for="exampleInputPassword1" class="form-label">Password</label>
-      <input type="password" class="form-control" id="exampleInputPassword1" name="password" ngModel data-lpignore="true">
+
+    <div class="mx-2 my-1">
+      <label for="email" class="form-label">Email address</label>
+      <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" ngModel data-lpignore="true" formControlName="email">
+      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+
+      <!-- * Validators * -->
+      <div *ngIf="modalForm.get('email')?.invalid && (modalForm.get('email')?.dirty || modalForm.get('email')?.touched)" class="my-0">
+        <div *ngIf="modalForm.get('email')?.errors?.['required'] || modalForm.get('email')?.errors?.['email']" class="alert alert-warning mt-3" role="alert">
+          Please enter a proper email.
+        </div>
+      </div>
+
+    </div>
+    <div class="mx-2 my-1" *ngIf="type==='post'">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password" name="password" ngModel data-lpignore="true" formControlName="password">
+
+      <!-- * Validators * -->
+      <div *ngIf="modalForm.get('password')?.invalid && (modalForm.get('password')?.dirty || modalForm.get('password')?.touched)" class="my-0">
+        <div *ngIf="modalForm.get('password')?.errors?.['required'] || modalForm.get('password')?.errors?.['minlength']" class="alert alert-warning mt-3" role="alert">
+          Password must be at least 4 characters long.
+        </div>
+      </div>
     </div>
   </form>
 </div>

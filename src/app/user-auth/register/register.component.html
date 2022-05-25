@@ -1,30 +1,50 @@
 <!-- <p>register works!</p> -->
 
 <div class="container">
-  <form #registerForm="ngForm">
+  <form [formGroup]="registerForm">
     <div class="form-row">
       <div class="col">
-        <label for="exampleInputFName" class="form-label">First Name</label>
-        <input type="text" class="form-control" id="exampleInputFName" name="first_name" ngModel data-lpignore="true">
+        <label for="fname" class="form-label">First Name</label>
+        <input type="text" class="form-control" id="fname" name="first_name" ngModel data-lpignore="true" formControlName="first_name">
       </div>
       <div class="col">
-        <label for="exampleInputLName" class="form-label">Last Name</label>
-        <input type="text" class="form-control" id="exampleInputLName" name="last_name" ngModel data-lpignore="true">
+        <label for="lname" class="form-label">Last Name</label>
+        <input type="text" class="form-control" id="lname" name="last_name" ngModel data-lpignore="true" formControlName="last_name">
       </div>
     </div>
+
+    <!-- * Name Validators * -->
+    <div *ngIf="(registerForm.get('first_name')?.invalid && (registerForm.get('first_name')?.dirty || registerForm.get('first_name')?.touched)) || (registerForm.get('last_name')?.invalid && (registerForm.get('last_name')?.dirty || registerForm.get('last_name')?.touched))" class="mx-2">
+      <div *ngIf="registerForm.get('first_name')?.errors?.['required'] || registerForm.get('last_name')?.errors?.['required']" class="alert alert-warning mt-1" role="alert">
+        Name is required.
+      </div>
+    </div>
+
     <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">Email address</label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" ngModel data-lpignore="true">
+      <label for="email" class="form-label">Email address</label>
+      <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" ngModel data-lpignore="true" formControlName="email">
       <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+
+      <!-- * Validators * -->
+      <div *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)">
+        <div *ngIf="registerForm.get('email')?.errors?.['required'] || registerForm.get('email')?.errors?.['email']" class="alert alert-warning mt-3" role="alert">
+          Please enter a proper email.
+        </div>
+      </div>
+
     </div>
     <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Password</label>
-      <input type="password" class="form-control" id="exampleInputPassword1" name="password" ngModel data-lpignore="true">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password" name="password" ngModel data-lpignore="true" formControlName="password">
+
+      <!-- * Validators * -->
+      <div *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)">
+        <div *ngIf="registerForm.get('password')?.errors?.['required'] || registerForm.get('password')?.errors?.['minlength']" class="alert alert-warning mt-3" role="alert">
+          Password must be at least 4 characters long.
+        </div>
+      </div>
+
     </div>
-    <!-- <div class="mb-3 form-check">
-      <input type="checkbox" class="form-check-input" id="exampleCheck1">
-      <label class="form-check-label" for="exampleCheck1">Check me out</label>
-    </div> -->
     <div class="col-md-12 text-center">
       <div>
         <button (click)="signUp(registerForm.value)" type="submit" class="btn btn-primary">Sign Up</button>

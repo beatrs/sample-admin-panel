@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from '../models/user.model';
 import { UserServiceService } from '../services/user-service.service';
+import { FormGroup, FormBuilder, Validators, NgForm, FormControl, AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-user-add-edit',
@@ -17,9 +17,12 @@ export class UserAddEditComponent implements OnInit {
 
   title = '';
   activeUser = new User({id: 0, first_name: '', last_name: '', email: '', password: '', isDeleted: true});
+  modalForm : FormGroup = new FormGroup({});
+
   constructor(
     private activeModal: NgbActiveModal,
-    private userService: UserServiceService) { }
+    private userService: UserServiceService,
+    private fb: FormBuilder) { }
 
   ngOnInit(): void {
     console.log(this.user)
@@ -32,6 +35,14 @@ export class UserAddEditComponent implements OnInit {
     } else if (this.type === 'put') {
       this.title = 'Edit User';
     }
+
+    this.modalForm = this.fb.group({
+      first_name: [null, [Validators.required]],
+      last_name: [null, [Validators.required]],
+      email: [null, [Validators.required, Validators.email]],
+      password: [null, [Validators.required, Validators.minLength(4)]],
+    });
+
   }
 
   closeModal() {
